@@ -1,0 +1,76 @@
+.main_menu li{
+    display: inline-block;
+    list-style: none;
+    color: #116493;
+    margin-right: 15px;
+}
+
+.tweets {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 600px;
+}
+.tweets td, .tweets th{
+    border: 1px solid black;
+    padding: 5px;
+}
+
+a.button {
+    border-radius: 4px;
+    color: #000000;
+    font-size: 16px;
+    background: #b9cfe5;
+    padding: 3px 3px 3px 3px;
+    margin: 3px 3px 3px 3px;
+    text-decoration: none;
+}
+
+a.countComment {
+    border-radius: 4px;
+    color: #000000;
+    font-size: 16px;
+    background: #ffffff;
+    padding: 3px 3px 3px 3px;
+    margin: 3px 3px 3px 3px;
+    text-decoration: none;
+}
+
+#topLeft {
+    width: 15%;
+    text-align: center;
+}
+
+#topRight {
+    text-align: right;
+}
+
+#center {
+    padding: 15px;
+}
+
+#bottomLeft {
+    width: 20%;
+    text-align: left;
+}
+
+#bottomRight {
+    text-align: right;
+}
+
+table.messages {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 600px;
+}
+
+table.messages td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.messages_menu li{
+    display: inline-block;
+    list-style: none;
+    color: #116493;
+    margin-right: 15px;
+}
