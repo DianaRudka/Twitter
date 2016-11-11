@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Czas generowania: 07 Lis 2016, 09:18
+-- Czas generowania: 11 Lis 2016, 19:08
 -- Wersja serwera: 5.7.16-0ubuntu0.16.04.1
 -- Wersja PHP: 7.0.8-0ubuntu0.16.04.3
 
@@ -64,18 +64,25 @@ CREATE TABLE `messages` (
   `sender_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
   `message` text NOT NULL,
-  `msg_status` tinyint(1) NOT NULL
+  `msg_status` tinyint(1) NOT NULL,
+  `replay_to` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Zrzut danych tabeli `messages`
 --
 
-INSERT INTO `messages` (`id`, `creation_date`, `sender_id`, `receiver_id`, `message`, `msg_status`) VALUES
-(1, 1477997638, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 1),
-(2, 1477997700, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 0),
-(3, 1477999638, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 0),
-(4, 1477919638, 41, 36, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 0);
+INSERT INTO `messages` (`id`, `creation_date`, `sender_id`, `receiver_id`, `message`, `msg_status`, `replay_to`) VALUES
+(1, 1477997638, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 1, 0),
+(2, 1477997700, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 1, 0),
+(3, 1477999638, 28, 29, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 1, 0),
+(4, 1477919638, 41, 36, 'blablabla sjdbfjs jsfbsj sjfbsefe ejsbfej ejeuhfsnv sjsie efheifh sjhrfhei efsjks euhff ejfbsjk jrdkkjg rjgndjrig ', 1, 0),
+(5, 1477997800, 29, 41, 'jakas wiadomosc', 0, 0),
+(6, 1478813103, 32, 41, 'cos tu wpisze ', 0, 0),
+(7, 1478813305, 32, 29, 'znowu napisalam wiadomosc', 1, 0),
+(8, 1478876494, 41, 29, 'odpisuje na wiadomosc od Marka\r\n\r\nW dniu 01-11-2016, 11:56:40 uÅ¼ytkownik Marek napisaÅ‚:\r\njakas wiadomosc', 1, 5),
+(9, 1478876668, 41, 28, 'czesc co slychac?', 0, 0),
+(10, 1478876771, 28, 41, 'calkiem spoko, duzo pracy z php\r\nW dniu 11-11-2016, 16:04:28 uÅ¼ytkownik Waldek napisaÅ‚:\r\nczesc co slychac?', 1, 9);
 
 -- --------------------------------------------------------
 
@@ -129,7 +136,8 @@ INSERT INTO `tweets` (`id`, `user_id`, `tweet`, `creation_date`) VALUES
 (32, 36, 'nowy uÅ¼ytkownik na twitterze', 1478112027),
 (33, 32, 'shdbjhs sdhbse sdfbs sdefbd', 1478285714),
 (35, 32, 'fbhaebf aefbehbahf aebfaheb ajhdjjwinddh degte', 1478382832),
-(36, 41, 'cos wpisujemy w pole tweet', 1478434433);
+(36, 41, 'cos wpisujemy w pole tweet', 1478434433),
+(37, 41, 'jakas wiadomosc', 1478789182);
 
 -- --------------------------------------------------------
 
@@ -209,12 +217,12 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT dla tabeli `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT dla tabeli `tweets`
 --
 ALTER TABLE `tweets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
