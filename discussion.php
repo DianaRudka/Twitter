@@ -1,14 +1,17 @@
 <?php
 // main page
+include_once 'src/Message.php';
+include_once 'src/Comment.php';
 include_once 'src/User.php';
 include_once 'src/Tweet.php';
-include_once 'src/Comment.php';
 require_once 'src/connection.php';
 
 session_start();
 if (!isset($_SESSION['loggedUserId'])) {
     header("Location: login.php");
 }
+
+$msgCount = Message::countReceivedUnreadMessages($conn, $_SESSION['loggedUserId']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['newComment'] != '') {
@@ -59,7 +62,7 @@ $username = User::loadUsernameByUserId($conn, $tweetToComment->getUserId());
                     <a href="index.php">Strona główna</a>
                 </li>
                 <li>
-                    <a href="inbox.php">Wiadomości</a>
+                    <a href="inbox.php">Wiadomości  <?=$msgCount?></a>
                 </li>
                 <li>
                     <a href="accountAdjustment.php">Ustawienia konta</a>
@@ -70,7 +73,7 @@ $username = User::loadUsernameByUserId($conn, $tweetToComment->getUserId());
         <table class="tweets">
             <tr>
                 <td>
-                    <a href="userTweets.php?followedUserId=<?=$tweetToComment->getUserId()?>">
+                    <a href="usersTweets.php?followedUserId=<?=$tweetToComment->getUserId()?>">
                         <?=$username?>
                     </a>
                 </td>

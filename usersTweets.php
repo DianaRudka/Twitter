@@ -1,14 +1,17 @@
 <?php
 //show chosen user tweets
+include_once 'src/Message.php';
+include_once 'src/Comment.php';
 include_once 'src/User.php';
 include_once 'src/Tweet.php';
-include_once 'src/Comment.php';
 require_once 'src/connection.php';
 
 session_start();
 if (!isset($_SESSION['loggedUserId'])) {
     header("Location: login.php");
 }
+
+$msgCount = Message::countReceivedUnreadMessages($conn, $_SESSION['loggedUserId']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $followedUserId = $_GET['followedUserId'];
@@ -41,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     <a href="index.php">Strona główna</a>
                 </li>
                 <li>
-                    <a href="inbox.php">Wiadomości</a>
+                    <a href="inbox.php">Wiadomości  <?=$msgCount?></a>
                 </li>
                 <li>
                     <a href="accountAdjustment.php">Ustawienia konta</a>
@@ -57,6 +60,7 @@ if ($followedUserId != $_SESSION['loggedUserId']) {
                       name="message" placeholder="Napisz wiadomość"></textarea><br>
                 <br>
             <input type="submit" id="message_submit" value="Wyślij">
+            <input name="followedUserId" value="<?=$followedUserId?>" type="hidden">
         </form>
 <?php
 }

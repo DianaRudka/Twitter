@@ -1,5 +1,6 @@
 <?php
 // main page
+include_once 'src/Message.php';
 include_once 'src/Comment.php';
 include_once 'src/User.php';
 include_once 'src/Tweet.php';
@@ -9,6 +10,8 @@ session_start();
 if (!isset($_SESSION['loggedUserId'])) {
     header("Location: login.php");
 }
+
+$msgCount = Message::countReceivedUnreadMessages($conn, $_SESSION['loggedUserId']);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_POST['newTweet'] != '') {
@@ -21,9 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $newTweet->setTweet($tweet);
         $newTweet->setCreationDate($creationDate);
         
-        if ($newTweet->saveToDB($conn)) {
-            
-        } else {
+        if (!$newTweet->saveToDB($conn)) {
             echo 'Somethogn went wrong. Try again';
         }
     }
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="index.php">Strona główna</a>
                 </li>
                 <li>
-                    <a href="inbox.php">Wiadomości</a>
+                    <a href="inbox.php">Wiadomości  <?=$msgCount?></a>
                 </li>
                 <li>
                     <a href="accountAdjustment.php">Ustawienia konta</a>

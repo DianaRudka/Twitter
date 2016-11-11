@@ -1,7 +1,8 @@
 <?php
+//login page
 require_once 'src/User.php';
 require_once 'src/connection.php';
-// login page
+
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

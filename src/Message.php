@@ -6,7 +6,9 @@ class Message {
     private $receiverId;
     private $message;
     private $msgStatus;
-    
+    private $replayTo;
+
+
     public function __construct() {
         $this->id = -1;
         $this->creationDate = '';
@@ -14,6 +16,7 @@ class Message {
         $this->receiverId = '';
         $this->message = '';
         $this->msgStatus = 1;
+        $this->replayTo = '';
         
     }
     
@@ -40,6 +43,10 @@ class Message {
     function getMsgStatus() {
         return $this->msgStatus;
     }
+    
+    function getReplayTo() {
+        return $this->replayTo;
+    }
 
     function setCreationDate($creationDate) {
         $this->creationDate = $creationDate;
@@ -61,17 +68,21 @@ class Message {
         $this->msgStatus = $msgStatus;
     }
     
+    function setReplayTo($replayTo) {
+        $this->replayTo = $replayTo;
+    }
+    
     public function saveToDB(mysqli $conn) {
         if ($this->id == -1) {
             $statement = $conn->prepare("INSERT INTO messages(creation_date, sender_id, "
-                    . "receiver_id, message, msg_status) VALUES (?, ?, ?, ?)");
+                    . "receiver_id, message, msg_status, replay_to) VALUES (?, ?, ?, ?, ?, ?)");
             
             if (!$statement) {
                 return false;
             }
             
-            $statement->bind_param("iiisi", $this->creationDate, $this->senderId, 
-                    $this->receiverId, $this->message, $this->msgStatus);
+            $statement->bind_param("iiisii", $this->creationDate, $this->senderId, 
+                    $this->receiverId, $this->message, $this->msgStatus, $this->replayTo);
             
             if ($statement->execute()) {
                 $this->id = $conn->insert_id;
@@ -88,8 +99,7 @@ class Message {
         if ($result) {
             return true;
         }
-        return false;
-       
+        return false;       
     }
 
 
@@ -107,6 +117,7 @@ class Message {
                 $receivedMessages->creationDate = $row["creation_date"];
                 $receivedMessages->message = $row['message'];
                 $receivedMessages->msgStatus = $row['msg_status'];
+                $receivedMessages->replayTo = $row['replay_to'];
                 
                 $ret[$receivedMessages->id] = $receivedMessages;
             }
@@ -129,12 +140,43 @@ class Message {
                 $receivedMessages->creationDate = $row["creation_date"];
                 $receivedMessages->message = $row['message'];
                 $receivedMessages->msgStatus = $row['msg_status'];
+                $receivedMessages->replayTo = $row['replay_to'];
                 
                 $ret[$receivedMessages->id] = $receivedMessages;
             }
         }
             
         return $ret;
+    }
+    
+    static public function loadMessageByMessageId(mysqli $conn, $msgId) {
+        $sql = "SELECT * FROM messages WHERE id LIKE $msgId";
+        $result = $conn->query($sql);
+        
+        if ($result != false && $result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            
+            $receivedMessage = new Message();
+            $receivedMessage->id = $row["id"];
+            $receivedMessage->senderId = $row["sender_id"];
+            $receivedMessage->receiverId = $row["receiver_id"];
+            $receivedMessage->creationDate = $row["creation_date"];
+            $receivedMessage->message = $row['message'];
+            $receivedMessage->msgStatus = $row['msg_status'];
+            $receivedMessage->replayTo = $row['replay_to'];
+        }
+            
+        return $receivedMessage;
+    }
+    
+    static public function countReceivedUnreadMessages(mysqli $conn, $userId) {
+        $sql = "SELECT * FROM messages WHERE receiver_id = $userId AND msg_status = 1";
+        $result = $conn->query($sql);
+        
+        if ($result != false && $result->num_rows != 0) {
+            return $result->num_rows;
+        } 
+        return 0;
     }
 
 
